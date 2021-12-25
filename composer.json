@@ -1,0 +1,17 @@
+{
+  "name": "jrfnl/composer-install-bug",
+  "description": "Proof of concept",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "php": ">=5.6",
+    "symfony/polyfill-php73": "^1.19"
+  },
+  "require-dev": {
+    "yoast/phpunit-polyfills": "^1.0.0"
+  },
+  "config": {
+    "platform": {
+      "php": "5.6.40"
+    }
+  }
+}

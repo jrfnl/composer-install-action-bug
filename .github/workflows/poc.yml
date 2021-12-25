@@ -1,0 +1,48 @@
+name: Test
+
+on:
+  # Run on pushes to select branches and on all pull requests.
+  push:
+
+jobs:
+  poc:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['5.6', '8.0']
+
+    name: "PHP ${{ matrix.php }}"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: zend.assertions=1, error_reporting=-1, display_errors=On
+          coverage: none
+
+      - name: Conditionally remove the PHP platform requirement
+        if: ${{ matrix.php > '7.0' }}
+        run: composer config --unset platform.php
+
+      - name: "Install Composer dependencies - PHP 5.6 - 7.0"
+        if: ${{ matrix.php < '7.1' }}
+        uses: ramsey/composer-install@v2
+
+      - name: "Install Composer dependencies - PHP 7.1 or higher"
+        if: ${{ matrix.php > '7.0' }}
+        uses: ramsey/composer-install@v2
+        with:
+          # Force a `composer update` run.
+          dependency-versions: "highest"
+          # But make it selective.
+          composer-options: "yoast/phpunit-polyfills --with-dependencies"
+
+      - name: Validate composer.json
+        if: ${{ always() }}
+        run: composer validate --strict
