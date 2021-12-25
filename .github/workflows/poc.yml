@@ -1,0 +1,41 @@
+name: Test
+
+on:
+  # Run on pushes to select branches and on all pull requests.
+  push:
+
+jobs:
+  poc:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['5.6']
+
+    name: "PHP ${{ matrix.php }}"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: zend.assertions=1, error_reporting=-1, display_errors=On
+          coverage: none
+
+      - name: Use Composer 1.x
+        run: composer self-update --1
+
+      - name: Install Composer dependencies
+        uses: "ramsey/composer-install@v2"
+
+      - name: Validate composer.json
+        if: ${{ always() }}
+        run: composer validate --strict
+
+      - name: Validate composer.json with `no-check-version`
+        if: ${{ always() }}
+        run: composer validate --no-check-version
