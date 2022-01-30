@@ -1,0 +1,76 @@
+name: Test
+
+on:
+  # Run on pushes to select branches and on all pull requests.
+  push:
+
+jobs:
+  poc:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['5.4']
+        composer: ['1.6.5', '1.7.0', 'v1', 'v2']
+        os: ['windows-2019', 'windows-latest']
+
+        include:
+          - php: '5.3'
+            composer: 'v1'
+            os: 'windows-latest'
+
+          - php: '5.4'
+            composer: 'v1'
+            os: 'ubuntu-latest'
+
+    name: "PHP ${{ matrix.php }} | Composer ${{ matrix.composer }} | OS ${{ matrix.os }}"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: error_reporting=-1, display_errors=On
+          coverage: none
+          tools: composer:${{ matrix.composer }}
+
+      - name: Install Composer dependencies
+        run: composer install -vvv --no-interaction
+
+      - name: Composer diagnose
+        if: always()
+        continue-on-error: true
+        run: composer diagnose
+
+  composer-install:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['5.4']
+        composer: ['v1']
+        os: ['windows-latest', 'ubuntu-latest']
+
+    name: "Segfault with Composer install action"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: error_reporting=-1, display_errors=On
+          coverage: none
+          tools: composer:${{ matrix.composer }}
+
+      - name: Install Composer dependencies using Composer Install action
+        uses: "ramsey/composer-install@v2"
+        with:
+          composer-options: '-vvv'

@@ -1,0 +1,9 @@
+{
+  "name": "jrfnl/composer-1-php-54-on-windows",
+  "description": "Testing",
+  "license": "MIT",
+  "require": {
+    "php": ">=5.4",
+    "ehime/hello-world": "^1.0.0"
+  }
+}
