@@ -38,6 +38,9 @@ jobs:
           coverage: none
           tools: composer:${{ matrix.composer }}
 
+      - name: "Conditionally disable tls (Composer 1.x/Windows/PHP 5.4)"
+        run: composer config -g -- disable-tls true
+
       - name: Install Composer dependencies
         run: composer install -vvv --no-interaction
 
@@ -69,6 +72,9 @@ jobs:
           ini-values: error_reporting=-1, display_errors=On
           coverage: none
           tools: composer:${{ matrix.composer }}
+
+      - name: "Conditionally disable tls (Composer 1.x/Windows/PHP 5.4)"
+        run: composer config -g -- disable-tls true
 
       - name: Install Composer dependencies using Composer Install action
         uses: "ramsey/composer-install@v2"
