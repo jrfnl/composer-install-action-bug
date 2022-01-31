@@ -1,0 +1,41 @@
+name: Test
+
+on:
+  # Run on pushes to select branches and on all pull requests.
+  push:
+
+jobs:
+  poc:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['5.5']
+        composer: ['v1', 'v2']
+        os: ['windows-2019', 'windows-2022']
+
+    name: "PHP ${{ matrix.php }} | Composer ${{ matrix.composer }} | OS ${{ matrix.os }}"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: error_reporting=-1, display_errors=On
+          coverage: none
+          tools: composer:${{ matrix.composer }}
+
+      - name: Install Composer dependencies
+        run: composer install -v --no-ansi
+
+      - name: "Are standards registered ?"
+        run: vendor/bin/phpcs -i
+
+      - name: Composer diagnose
+        if: always()
+        continue-on-error: true
+        run: composer diagnose
