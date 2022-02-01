@@ -5,7 +5,7 @@
     "require-dev": {
         "php": ">=5.4",
         "squizlabs/php_codesniffer" : "dev-master",
-        "dealerdirect/phpcodesniffer-composer-installer": "*"
+        "dealerdirect/phpcodesniffer-composer-installer": "dev-master"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
