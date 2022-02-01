@@ -4,7 +4,7 @@
     "license": "MIT",
     "require-dev": {
         "php": ">=5.4",
-        "squizlabs/php_codesniffer" : "*",
+        "squizlabs/php_codesniffer" : "dev-master",
         "dealerdirect/phpcodesniffer-composer-installer": "*"
     },
     "minimum-stability": "dev",
