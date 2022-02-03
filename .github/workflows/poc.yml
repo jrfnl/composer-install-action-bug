@@ -22,10 +22,16 @@ jobs:
           coverage: none
 
       - name: Install Composer dependencies
-        run: composer install -v --no-ansi
+        run: composer install -vvv
+
+      - name: Show PHPCS installed standards
+        run: vendor/bin/phpcs -i
 
       - name: Re-install one dependency
-        run: composer reinstall phpcsstandards/phpcsextra -v
+        run: composer reinstall squizlabs/php_codesniffer -vvv
+
+      - name: Show PHPCS installed standards after reinstall
+        run: vendor/bin/phpcs -i
 
       - name: Composer diagnose
         if: always()
