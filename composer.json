@@ -1,0 +1,16 @@
+{
+    "name": "jrfnl/composer-reinstall",
+    "description": "Testing",
+    "license": "MIT",
+    "require-dev": {
+        "php": ">=5.4",
+        "phpcsstandards/phpcsextra": "^1.0.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}

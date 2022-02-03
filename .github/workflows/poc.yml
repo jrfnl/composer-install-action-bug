@@ -1,0 +1,33 @@
+name: Test
+
+on:
+  # Run on pushes to select branches and on all pull requests.
+  push:
+
+jobs:
+  poc:
+    runs-on: ubuntu-latest
+
+    name: "Composer reinstall"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 'latest'
+          ini-values: error_reporting=-1, display_errors=On
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install -v --no-ansi
+
+      - name: Re-install one dependency
+        run: composer reinstall phpcsstandards/phpcsextra -v
+
+      - name: Composer diagnose
+        if: always()
+        continue-on-error: true
+        run: composer diagnose
