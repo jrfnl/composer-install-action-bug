@@ -1,0 +1,8 @@
+{
+    "name": "jrfnl/switch-php-version-in-job",
+    "description": "Testing",
+    "license": "MIT",
+    "require": {
+        "ehime/hello-world": "^1.0.0"
+    }
+}

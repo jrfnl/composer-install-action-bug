@@ -1,0 +1,44 @@
+name: Test
+
+on:
+  # Run on pushes to select branches and on all pull requests.
+  push:
+
+jobs:
+  poc:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['5.6', '7.4', 'latest', '8.2']
+
+    name: "Switch PHP versions - PHP 7.2 to ${{ matrix.php }}"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install PHP 7.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.2'
+          ini-values: error_reporting=-1, display_errors=On
+          coverage: none
+
+      - name: Install Composer dependencies on PHP 7.2
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "highest"
+
+      - name: Install PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: error_reporting=-1, display_errors=On
+          coverage: none
+
+      - name: Install Composer dependencies on PHP ${{ matrix.php }}
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "highest"
